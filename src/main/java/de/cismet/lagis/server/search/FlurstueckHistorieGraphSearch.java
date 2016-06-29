@@ -76,9 +76,9 @@ public class FlurstueckHistorieGraphSearch extends AbstractCidsServerSearch impl
                 + "            ) SELECT * FROM historie_zurueck WHERE level <= 0 AND level > {PREDECESSOR_LEVEL} \n"
                 + "        ) UNION ( \n"
                 + "            WITH RECURSIVE historie_vor AS ( \n"
-                + "                SELECT fk_vorgaenger, fk_nachfolger, 0 AS level \n"
+                + "                SELECT fk_vorgaenger, fk_nachfolger, 1 AS level \n"
                 + "                FROM flurstueck_historie \n"
-                + "                WHERE fk_nachfolger = {FLURSTUECK_ID} \n"
+                + "                WHERE fk_vorgaenger = {FLURSTUECK_ID} \n"
                 + "            UNION ALL \n"
                 + "                SELECT \n"
                 + "                     s.fk_vorgaenger, \n"
@@ -93,7 +93,7 @@ public class FlurstueckHistorieGraphSearch extends AbstractCidsServerSearch impl
                 + "                    LEFT JOIN flurstueck_schluessel ON flurstueck_schluessel.id = flurstueck.fk_flurstueck_schluessel \n"
                 + "            ) SELECT * FROM historie_vor WHERE level > 0 AND level <= {SUCCESSOR_LEVEL} \n"
                 + "        ) UNION ( \n"
-                + "            WITH RECURSIVE historie_vor AS ( \n"
+                + "            WITH RECURSIVE historie_vor_nachbarn AS ( \n"
                 + "                SELECT fk_vorgaenger, fk_nachfolger, 0 AS level \n"
                 + "                FROM flurstueck_historie \n"
                 + "                WHERE fk_vorgaenger IN ( SELECT fk_vorgaenger  FROM flurstueck_historie  WHERE fk_nachfolger = {FLURSTUECK_ID} ) AND fk_nachfolger != {FLURSTUECK_ID} \n"
@@ -105,11 +105,11 @@ public class FlurstueckHistorieGraphSearch extends AbstractCidsServerSearch impl
                 + "                         THEN 0 \n"
                 + "                         ELSE 1 \n"
                 + "                     END \n"
-                + "                FROM historie_vor AS d \n"
+                + "                FROM historie_vor_nachbarn AS d \n"
                 + "                    JOIN flurstueck_historie AS s ON d.fk_nachfolger = s.fk_vorgaenger \n"
                 + "                    LEFT JOIN flurstueck ON flurstueck.id = d.fk_nachfolger \n"
                 + "                    LEFT JOIN flurstueck_schluessel ON flurstueck_schluessel.id = flurstueck.fk_flurstueck_schluessel \n"
-                + "            ) SELECT * FROM historie_vor WHERE level > -1 AND level <= {SIBBLING_LEVEL} \n"
+                + "            ) SELECT * FROM historie_vor_nachbarn WHERE level > -1 AND level <= {SIBBLING_LEVEL} \n"
                 + "        ) \n"
                 + "    ) AS historie \n"
                 + "    LEFT JOIN flurstueck AS vorgaenger ON historie.fk_vorgaenger = vorgaenger.id \n"
@@ -188,9 +188,8 @@ public class FlurstueckHistorieGraphSearch extends AbstractCidsServerSearch impl
                         .replace("{PREDECESSOR_LEVEL}", Integer.toString(predecessorLevel))
                         .replace("{SUCCESSOR_LEVEL}", Integer.toString(successorLevel))
                         .replace("{SIBBLING_LEVEL}", Integer.toString(sibblingLevel));
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(query);
-            }
+            
+            LOG.debug("History SQL-Query: <br>" +  org.apache.commons.lang.StringEscapeUtils.escapeHtml(query));
             final Collection<ArrayList> fieldsColl = metaService.performCustomSearch(query);
             final Collection<FlurstueckHistorieGraphSearchResultItem> items =
                 new ArrayList<FlurstueckHistorieGraphSearchResultItem>(fieldsColl.size());
