@@ -14,7 +14,11 @@
     <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Lagis Server</name>
+    <properties>
+        <names.lagis-server>LagIS Server</names.lagis-server>
+    </properties>
+    <name>${names.lagis-server}</name>
+
     <description>!!! description pending !!!</description>
     <licenses>
         <license>
