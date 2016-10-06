@@ -188,8 +188,9 @@ public class FlurstueckHistorieGraphSearch extends AbstractCidsServerSearch impl
                         .replace("{PREDECESSOR_LEVEL}", Integer.toString(predecessorLevel))
                         .replace("{SUCCESSOR_LEVEL}", Integer.toString(successorLevel))
                         .replace("{SIBBLING_LEVEL}", Integer.toString(sibblingLevel));
-            
-            LOG.debug("History SQL-Query: <br>" +  org.apache.commons.lang.StringEscapeUtils.escapeHtml(query));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("History SQL-Query: <br>" + org.apache.commons.lang.StringEscapeUtils.escapeHtml(query));
+            }
             final Collection<ArrayList> fieldsColl = metaService.performCustomSearch(query);
             final Collection<FlurstueckHistorieGraphSearchResultItem> items =
                 new ArrayList<FlurstueckHistorieGraphSearchResultItem>(fieldsColl.size());
