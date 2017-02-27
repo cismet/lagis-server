@@ -20,14 +20,14 @@
     <name>${names.lagis-server}</name>
     <description>!!! description pending !!!</description>
     
-  <scm>
+    <scm>
         <connection>https://github.com/cismet/lagis-server.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/lagis-server.git</developerConnection>
         <url>https://github.com/cismet/lagis-server</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
   
-  <issueManagement>
+    <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/switchonproject/lagis-server/issues</url>
     </issueManagement>
@@ -49,13 +49,6 @@
             </dependency>
         
             <!-- BEGIN: managed cids-dependencies -->
-            <dependency>
-                <groupId>de.cismet.commons</groupId>
-                <artifactId>cismet-commons</artifactId>
-                <version>5.0-SNAPSHOT</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
             
             <dependency>
                 <groupId>de.cismet.cids</groupId>
@@ -72,15 +65,7 @@
                 <scope>compile</scope>
                 <type>jar</type>
             </dependency>
-                        
-            <dependency>
-                <groupId>de.cismet.commons</groupId>
-                <artifactId>cismap-commons</artifactId>
-                <version>5.0-SNAPSHOT</version>
-                <scope>compile</scope>
-                <type>jar</type>
-            </dependency>
-            
+                                    
             <dependency>
                 <groupId>de.cismet.lagis</groupId>
                 <artifactId>lagis-commons</artifactId>
@@ -106,11 +91,27 @@
             <artifactId>cids-server</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.cismet.cids</groupId>
+            <artifactId>cids-server-rest-types</artifactId>
+        </dependency>
+        <dependency>
             <groupId>de.cismet.lagis</groupId>
             <artifactId>lagis-commons</artifactId>
+            <!--
+                be careful when relying on scope set in <dependencyManagement>:
+                could be overwritten by upstream <dependencyManagement>!
+            -->
+            <scope>provided</scope>
         </dependency>
         <!-- END: cids-dependencies -->
         
+        <!-- BEGIN: managed dependencies -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <!-- END: managed dependencies -->
+
         <!-- BEGIN: Provided dependencies -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -118,6 +119,12 @@
             <scope>provided</scope>
         </dependency>
         <!-- END: Provided dependencies -->
+        
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
     </dependencies>
     
     <build>
