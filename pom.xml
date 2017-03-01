@@ -120,6 +120,15 @@
         </dependency>
         <!-- END: Provided dependencies -->
         
+        <!-- BEGIN: Runtime dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <!-- END: Runtime dependencies -->
+        
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
