@@ -29,7 +29,7 @@
   
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/switchonproject/lagis-server/issues</url>
+        <url>https://github.com/cismet/lagis-server/issues</url>
     </issueManagement>
     
     <ciManagement>
@@ -137,6 +137,21 @@
     </dependencies>
     
     <build>
+        <pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>Sirius.server.middleware.impls.domainserver.DomainServerImpl</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </plugin>     
+                </plugins>
+            </pluginManagement>      
         <!--
             CAUTION ! Ugly Winning bei der Namens-Auswahl !!! siehe Slack =>
             https://cismet.slack.com/files/jruiz/F3ZC7HX7V/Snapshot_als_finalName_in_pom_xml
