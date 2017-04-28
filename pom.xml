@@ -69,7 +69,7 @@
             <dependency>
                 <groupId>de.cismet.lagis</groupId>
                 <artifactId>lagis-commons</artifactId>
-                <version>5.0</version>
+                <version>5.0.1</version>
                 <!--
                      lagis-server imports only final CONSTANTS from lagis-commons:
                     -> static final fields will be inlined by the bytecode compiler 
