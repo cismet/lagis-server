@@ -23,6 +23,7 @@ import de.cismet.lagis.commons.LagisConstants;
 /**
  * DOCUMENT ME!
  *
+ * @author   thorsten
  * @version  $Revision$, $Date$
  */
 public class LagisFortfuehrungItemSearch extends AbstractCidsServerSearch {
@@ -114,14 +115,15 @@ public class LagisFortfuehrungItemSearch extends AbstractCidsServerSearch {
                     + "LEFT JOIN flurstueck ON lookup_alkis_ffn.ffn = flurstueck.fortfuehrungsnummer "
                     + "LEFT JOIN geom ON geom.id = flurstueck.umschreibendes_rechteck "
                     + "WHERE geom.id IS NOT NULL AND "
-                    + "to_date(lookup_alkis_ffn.beginn, 'DD-Mon-YY') BETWEEN '" + fromDate + "' AND '" + toDate + "';";
+                    + "to_date(lookup_alkis_ffn.beginn, 'DD-Mon-YY') >= '" + fromDate
+                    + "' AND to_date(lookup_alkis_ffn.beginn, 'DD-Mon-YY') <= '" + toDate + "';";
 
         final MetaService metaService = (MetaService)getActiveLocalServers().get("WUNDA_BLAU");
 
         try {
             for (final ArrayList fields : metaService.performCustomSearch(query)) {
-                final String queryFF = "SELECT id FROM fortfuehrung WHERE alkis_ffn_id = '" + (Integer)fields.get(0)
-                            + "' AND flurstueck_id = '" + (Integer)fields.get(7) + "' ";
+                final String queryFF = "SELECT id FROM fortfuehrung WHERE alkis_ffn Like '"
+                            + (String)fields.get(1) + "';";
                 final MetaService metaServiceFF = (MetaService)getActiveLocalServers().get(LagisConstants.DOMAIN_LAGIS);
 
                 Integer ffId = null;
@@ -132,23 +134,14 @@ public class LagisFortfuehrungItemSearch extends AbstractCidsServerSearch {
 
                 items.add(
                     new Object[] {
-//    public static int FIELD_ID = 0;
-                        (Integer)fields.get(0),
-//    public static int FIELD_FFN = 1;
-                        (String)fields.get(1),
-//    public static int FIELD_ANLASSNAME = 2;
-                        (String)fields.get(2),
-//    public static int FIELD_BEGINN = 3;
-                        (Date)fields.get(3),
-//    public static int FIELD_FS_ALT = 4;
-                        (String)fields.get(4),
-//    public static int FIELD_FS_NEU = 5;
-                        (String)fields.get(5),
-//    public static int FIELD_GEOFIELD = 6;
-                        (String)fields.get(6),
-//    public static int FIELD_FLURSTUECK_ID = 7;
-                        (Integer)fields.get(7),
-//    public static int FIELD_FORTFUEHRUNG_DI = 8;
+                        (Integer)fields.get(FIELD_ID),
+                        (String)fields.get(FIELD_FFN),
+                        (String)fields.get(FIELD_ANLASSNAME),
+                        (Date)fields.get(FIELD_BEGINN),
+                        (String)fields.get(FIELD_FS_ALT),
+                        (String)fields.get(FIELD_FS_NEU),
+                        (String)fields.get(FIELD_GEOFIELD),
+                        (Integer)fields.get(FIELD_FLURSTUECK_ID),
                         ffId
                     });
             }
