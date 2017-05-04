@@ -116,7 +116,8 @@ public class LagisFortfuehrungItemSearch extends AbstractCidsServerSearch {
                     + "LEFT JOIN geom ON geom.id = flurstueck.umschreibendes_rechteck "
                     + "WHERE geom.id IS NOT NULL AND "
                     + "to_date(lookup_alkis_ffn.beginn, 'DD-Mon-YY') >= '" + fromDate
-                    + "' AND to_date(lookup_alkis_ffn.beginn, 'DD-Mon-YY') <= '" + toDate + "';";
+                    + "' AND to_date(lookup_alkis_ffn.beginn, 'DD-Mon-YY') <= '" + toDate + "' "
+                    + "ORDER BY lookup_alkis_ffn.ffn ASC;";
 
         final MetaService metaService = (MetaService)getActiveLocalServers().get("WUNDA_BLAU");
 
