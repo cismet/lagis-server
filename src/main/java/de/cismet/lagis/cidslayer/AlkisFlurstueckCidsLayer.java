@@ -32,11 +32,10 @@ public class AlkisFlurstueckCidsLayer extends DefaultCidsLayer {
                 + "alkis_flurstueck.id AS id, "
                 + "alkis_flurstueck.alkis_id AS alkis_id, "
                 + "flurstueck_art.bezeichnung AS flurstueck_art, "
-                + "st_asBinary(geom.geo_field) AS geometrie "
+                + "st_asBinary(alkis_flurstueck.geometrie) AS geometrie "
                 + "from alkis_flurstueck "
                 + "LEFT JOIN flurstueck_schluessel ON alkis_flurstueck.fk_schluessel = flurstueck_schluessel.id "
-                + "LEFT JOIN flurstueck_art ON flurstueck_schluessel.fk_flurstueck_art = flurstueck_art.id "
-                + "LEFT JOIN geom ON alkis_flurstueck.fk_geom = geom.id";
+                + "LEFT JOIN flurstueck_art ON flurstueck_schluessel.fk_flurstueck_art = flurstueck_art.id";
 
     private static final String[] NAMES = new String[] {
             "id",
@@ -105,6 +104,6 @@ public class AlkisFlurstueckCidsLayer extends DefaultCidsLayer {
 
     @Override
     public String getSqlGeoField() {
-        return "geo_field";
+        return "geometrie";
     }
 }
