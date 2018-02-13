@@ -17,7 +17,7 @@
         <names.lagis-server>LagIS Server</names.lagis-server>
     </properties>
     
-    <name>${names.lagis-server}</name>
+    <name>${names.lagis-server} [${project.version}]</name>
     <description>!!! description pending !!!</description>
     
     <scm>
