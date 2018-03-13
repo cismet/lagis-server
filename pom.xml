@@ -53,7 +53,7 @@
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>6.0</version>
+                <version>6.1</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
