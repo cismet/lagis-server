@@ -10,21 +10,21 @@
 
     <groupId>de.cismet.lagis</groupId>
     <artifactId>lagis-server</artifactId>
-    <version>6.0</version>
+    <version>6.1</version>
     <packaging>jar</packaging>
 
     <properties>
         <names.lagis-server>LagIS Server</names.lagis-server>
     </properties>
     
-    <name>${names.lagis-server}</name>
+    <name>${names.lagis-server} [${project.version}]</name>
     <description>!!! description pending !!!</description>
     
     <scm>
         <connection>https://github.com/cismet/lagis-server.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/lagis-server.git</developerConnection>
         <url>https://github.com/cismet/lagis-server</url>
-        <tag>v6.0</tag>
+        <tag>v6.1</tag>
     </scm>
   
     <issueManagement>
@@ -53,7 +53,7 @@
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>6.0</version>
+                <version>6.3.3</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -80,6 +80,14 @@
                 <scope>provided</scope>
                 <type>jar</type>
             </dependency>
+            
+            <dependency>
+                <groupId>de.cismet.cids.custom.wupp.server</groupId>
+                <artifactId>cids-custom-server-wuppertal</artifactId>
+                <version>6.10</version>
+                <scope>compile</scope>
+                <type>jar</type>
+            </dependency>            
             <!-- END: managed cids-dependencies -->    
         </dependencies>
     </dependencyManagement>
@@ -93,6 +101,10 @@
         <dependency>
             <groupId>de.cismet.cids</groupId>
             <artifactId>cids-server-rest-types</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.cismet.cids.custom.wupp.server</groupId>
+            <artifactId>cids-custom-server-wuppertal</artifactId>
         </dependency>
         <dependency>
             <groupId>de.cismet.lagis</groupId>
