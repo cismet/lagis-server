@@ -80,6 +80,14 @@
                 <scope>provided</scope>
                 <type>jar</type>
             </dependency>
+            
+            <dependency>
+                <groupId>de.cismet.cids.custom.wupp.server</groupId>
+                <artifactId>cids-custom-server-wuppertal</artifactId>
+                <version>6.10</version>
+                <scope>compile</scope>
+                <type>jar</type>
+            </dependency>            
             <!-- END: managed cids-dependencies -->    
         </dependencies>
     </dependencyManagement>
@@ -93,6 +101,10 @@
         <dependency>
             <groupId>de.cismet.cids</groupId>
             <artifactId>cids-server-rest-types</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.cismet.cids.custom.wupp.server</groupId>
+            <artifactId>cids-custom-server-wuppertal</artifactId>
         </dependency>
         <dependency>
             <groupId>de.cismet.lagis</groupId>
