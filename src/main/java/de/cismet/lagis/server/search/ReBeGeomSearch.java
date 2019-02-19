@@ -46,7 +46,7 @@ public class ReBeGeomSearch extends GeomServerSearch implements RestApiCidsServe
 
     private static final Logger LOG = Logger.getLogger(ReBeGeomSearch.class);
     private static final String SQL_TEMPLATE =
-        "SELECT %s FROM %s, geom WHERE geom.id = rebe.fk_geom AND ST_intersects(GeomFromText('%s', %s), geom.geo_field) AND (rebe.datum_loeschung IS NULL OR rebe.datum_loeschung > now())";
+        "SELECT %s FROM %s, geom WHERE geom.id = rebe.fk_geom AND ST_intersects(GeomFromText('%s', %s), geom.geo_field)";
 
     //~ Instance fields --------------------------------------------------------
 
