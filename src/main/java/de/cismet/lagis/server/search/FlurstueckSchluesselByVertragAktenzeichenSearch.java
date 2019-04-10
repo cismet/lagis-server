@@ -10,6 +10,9 @@ package de.cismet.lagis.server.search;
 import Sirius.server.middleware.interfaces.domainserver.MetaService;
 import Sirius.server.middleware.types.MetaClass;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.log4j.Logger;
 
 import org.openide.util.lookup.ServiceProvider;
@@ -40,6 +43,8 @@ import de.cismet.lagis.commons.LagisConstants;
  * @version  $Revision$, $Date$
  */
 @ServiceProvider(service = RestApiCidsServerSearch.class)
+@Getter
+@Setter
 public class FlurstueckSchluesselByVertragAktenzeichenSearch extends AbstractCidsServerSearch
         implements RestApiCidsServerSearch,
             ConnectionContextStore {
@@ -62,81 +67,55 @@ public class FlurstueckSchluesselByVertragAktenzeichenSearch extends AbstractCid
 
     //~ Instance fields --------------------------------------------------------
 
-    private final SearchInfo searchInfo;
+    private final SearchInfo searchInfo = initSearchInfo();
     private String aktenzeichenSearchPattern;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlkisFlurstueckGeomSearch object.
+     * Creates a new FlurstueckSchluesselByVertragAktenzeichenSearch object.
      */
     public FlurstueckSchluesselByVertragAktenzeichenSearch() {
-        this.searchInfo = new SearchInfo();
-        initSearchInfo();
     }
 
     /**
-     * Creates a new AlkisFlurstueckGeomSearch object.
+     * Creates a new FlurstueckSchluesselByVertragAktenzeichenSearch object.
      *
      * @param  aktenzeichenSearchPattern  DOCUMENT ME!
      */
     public FlurstueckSchluesselByVertragAktenzeichenSearch(final String aktenzeichenSearchPattern) {
-        this();
-        setAktenzeichen(aktenzeichenSearchPattern);
+        setAktenzeichenSearchPattern(aktenzeichenSearchPattern);
     }
 
     //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    private void initSearchInfo() {
-        getSearchInfo().setKey(this.getClass().getName());
-        getSearchInfo().setName(this.getClass().getSimpleName());
-        getSearchInfo().setDescription(
+    private static SearchInfo initSearchInfo() {
+        final SearchInfo searchInfo = new SearchInfo();
+        searchInfo.setKey(FlurstueckSchluesselByVertragAktenzeichenSearch.class.getName());
+        searchInfo.setName(FlurstueckSchluesselByVertragAktenzeichenSearch.class.getSimpleName());
+        searchInfo.setDescription(
             "Builtin Legacy Search to delegate the operation getLightweightMetaObjectsByQuery to the cids Pure REST Search API.");
 
         final List<SearchParameterInfo> parameterDescription = new LinkedList<>();
-        getSearchInfo().setParameterDescription(parameterDescription);
+        searchInfo.setParameterDescription(parameterDescription);
 
         final SearchParameterInfo resultParameterInfo = new SearchParameterInfo();
         resultParameterInfo.setKey("return");
         resultParameterInfo.setArray(true);
         resultParameterInfo.setType(Type.ENTITY_REFERENCE);
-        getSearchInfo().setResultDescription(resultParameterInfo);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  aktenzeichenSearchPattern  DOCUMENT ME!
-     */
-    public final void setAktenzeichen(final String aktenzeichenSearchPattern) {
-        this.aktenzeichenSearchPattern = aktenzeichenSearchPattern;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getAktenzeichenSearchPattern() {
-        return aktenzeichenSearchPattern;
-    }
-
-    @Override
-    public SearchInfo getSearchInfo() {
+        searchInfo.setResultDescription(resultParameterInfo);
         return searchInfo;
     }
+
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
-    }
-
-    @Override
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
     }
 
     @Override
@@ -159,7 +138,9 @@ public class FlurstueckSchluesselByVertragAktenzeichenSearch extends AbstractCid
             final MetaService metaService = (MetaService)getActiveLocalServers().get(LagisConstants.DOMAIN_LAGIS);
             return Arrays.asList(metaService.getMetaObjectNode(getUser(), sql, getConnectionContext()));
         } catch (final Exception e) {
-            LOG.fatal("problem during FlurstueckSchluesselByVertragAktenzeichen search", e);
+            LOG.fatal("problem during " + FlurstueckSchluesselByVertragAktenzeichenSearch.class.getSimpleName()
+                        + " search",
+                e);
             return null;
         }
     }

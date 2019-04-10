@@ -42,52 +42,62 @@ import de.cismet.lagis.commons.LagisConstants;
  *
  * @version  $Revision$, $Date$
  */
+@ServiceProvider(service = RestApiCidsServerSearch.class)
 @Getter
 @Setter
-@ServiceProvider(service = RestApiCidsServerSearch.class)
-public class FlurstueckSchluesselByMipaAktenzeichenSearch extends AbstractCidsServerSearch
+public class FlurstueckSchluesselByMipaCrossreferencesSearch extends AbstractCidsServerSearch
         implements RestApiCidsServerSearch,
             ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(FlurstueckSchluesselByMipaAktenzeichenSearch.class);
+    private static final Logger LOG = Logger.getLogger(FlurstueckSchluesselByMipaCrossreferencesSearch.class);
     private static final String SQL_TEMPLATE = "SELECT %s "
                 + "FROM %s AS flurstueck_schluessel "
-                + "LEFT JOIN alkis_flurstueck "
-                + "  ON alkis_flurstueck.fk_schluessel = flurstueck_schluessel.id "
                 + "LEFT JOIN gemarkung "
                 + "  ON flurstueck_schluessel.fk_gemarkung = gemarkung.id "
-                + ", mipa "
-                + "LEFT JOIN geom AS mipa_geom "
-                + "  ON mipa.fk_geom = mipa_geom.id "
+                + ", (SELECT %s::text AS gemarkung_bezeichnung, %s::text AS flur, %s::text AS flurstueck_zaehler, %s::text AS flurstueck_nenner) AS values "
                 + "WHERE "
-                + "  aktenzeichen ilike '%s' "
-                + "  AND ST_intersects(alkis_flurstueck.geometrie, mipa_geom.geo_field) "
-                + "  AND flurstueck_schluessel.id IS NOT NULL "
+                + "  gemarkung.bezeichnung ILIKE values.gemarkung_bezeichnung "
+                + "  AND flurstueck_schluessel.flur = values.flur::integer "
+                + "  AND CASE WHEN values.flurstueck_zaehler IS NOT NULL THEN flurstueck_schluessel.flurstueck_zaehler = values.flurstueck_zaehler::integer ELSE true END "
+                + "  AND CASE WHEN values.flurstueck_nenner  IS NOT NULL THEN flurstueck_schluessel.flurstueck_nenner  = values.flurstueck_nenner::integer  ELSE true END "
                 + ";";
 
     //~ Instance fields --------------------------------------------------------
 
     private final SearchInfo searchInfo = initSearchInfo();
-    private String aktenzeichenSearchPattern;
+    private String gemarkungBezeichnung;
+    private String flur;
+    private String flurstueckZaehler;
+    private String flurstueckNenner;
+
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new FlurstueckSchluesselByMipaAktenzeichenSearch object.
+     * Creates a new FlurstueckSchluesselByMipaCrossreferencesSearch object.
      */
-    public FlurstueckSchluesselByMipaAktenzeichenSearch() {
+    public FlurstueckSchluesselByMipaCrossreferencesSearch() {
     }
 
     /**
-     * Creates a new FlurstueckSchluesselByMipaAktenzeichenSearch object.
+     * Creates a new FlurstueckSchluesselByMipaCrossreferencesSearch object.
      *
-     * @param  aktenzeichenSearchPattern  DOCUMENT ME!
+     * @param  gemarkungBezeichnung  DOCUMENT ME!
+     * @param  flur                  DOCUMENT ME!
+     * @param  flurstueckZaehler     DOCUMENT ME!
+     * @param  flurstueckNenner      DOCUMENT ME!
      */
-    public FlurstueckSchluesselByMipaAktenzeichenSearch(final String aktenzeichenSearchPattern) {
-        setAktenzeichenSearchPattern(aktenzeichenSearchPattern);
+    public FlurstueckSchluesselByMipaCrossreferencesSearch(final String gemarkungBezeichnung,
+            final String flur,
+            final String flurstueckZaehler,
+            final String flurstueckNenner) {
+        setGemarkungBezeichnung(gemarkungBezeichnung);
+        setFlur(flur);
+        setFlurstueckZaehler(flurstueckZaehler);
+        setFlurstueckNenner(flurstueckNenner);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -99,8 +109,8 @@ public class FlurstueckSchluesselByMipaAktenzeichenSearch extends AbstractCidsSe
      */
     private static SearchInfo initSearchInfo() {
         final SearchInfo searchInfo = new SearchInfo();
-        searchInfo.setKey(FlurstueckSchluesselByMipaAktenzeichenSearch.class.getName());
-        searchInfo.setName(FlurstueckSchluesselByMipaAktenzeichenSearch.class.getSimpleName());
+        searchInfo.setKey(FlurstueckSchluesselByMipaCrossreferencesSearch.class.getName());
+        searchInfo.setName(FlurstueckSchluesselByMipaCrossreferencesSearch.class.getSimpleName());
         searchInfo.setDescription(
             "Builtin Legacy Search to delegate the operation getLightweightMetaObjectsByQuery to the cids Pure REST Search API.");
 
@@ -135,13 +145,14 @@ public class FlurstueckSchluesselByMipaAktenzeichenSearch extends AbstractCidsSe
                     SQL_TEMPLATE,
                     fields,
                     mcFlurstueckSchluessel.getTableName(),
-                    "%"
-                            + getAktenzeichenSearchPattern().replaceAll("\\*", "%")
-                            + "%");
+                    (getGemarkungBezeichnung() != null) ? ("'" + getGemarkungBezeichnung() + "'") : "NULL",
+                    (getFlur() != null) ? ("'" + getFlur() + "'") : "NULL",
+                    (getFlurstueckZaehler() != null) ? ("'" + getFlurstueckZaehler() + "'") : "NULL",
+                    (getFlurstueckNenner() != null) ? ("'" + getFlurstueckNenner() + "'") : "NULL");
             final MetaService metaService = (MetaService)getActiveLocalServers().get(LagisConstants.DOMAIN_LAGIS);
             return Arrays.asList(metaService.getMetaObjectNode(getUser(), sql, getConnectionContext()));
         } catch (final Exception e) {
-            LOG.fatal("problem during " + FlurstueckSchluesselByMipaAktenzeichenSearch.class.getSimpleName()
+            LOG.fatal("problem during " + FlurstueckSchluesselByMipaCrossreferencesSearch.class.getSimpleName()
                         + " search",
                 e);
             return null;
