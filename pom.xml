@@ -10,7 +10,7 @@
 
     <groupId>de.cismet.lagis</groupId>
     <artifactId>lagis-server</artifactId>
-    <version>6.1.4</version>
+    <version>6.2</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -24,7 +24,7 @@
         <connection>https://github.com/cismet/lagis-server.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/lagis-server.git</developerConnection>
         <url>https://github.com/cismet/lagis-server</url>
-        <tag>v6.1.4</tag>
+        <tag>v6.2</tag>
     </scm>
   
     <issueManagement>
@@ -53,7 +53,7 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>6.3</version>
+                <version>6.5</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -92,7 +92,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>6.10</version>
+                <version>6.13.1</version>
                 <scope>compile</scope>
                 <type>jar</type>
             </dependency>            
