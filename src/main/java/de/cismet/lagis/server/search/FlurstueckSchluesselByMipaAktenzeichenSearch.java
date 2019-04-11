@@ -58,7 +58,7 @@ public class FlurstueckSchluesselByMipaAktenzeichenSearch extends AbstractCidsSe
                 + "  ON mipa.fk_geom = mipa_geom.id "
                 + "WHERE "
                 + "  aktenzeichen ilike '%s' "
-                + "  AND ST_intersects(alkis_flurstueck.geometrie, mipa_geom.geo_field) "
+                + "  AND ST_intersects(st_buffer(alkis_flurstueck.geometrie, -1), mipa_geom.geo_field) "
                 + "  AND flurstueck_schluessel.id IS NOT NULL "
                 + ";";
 
