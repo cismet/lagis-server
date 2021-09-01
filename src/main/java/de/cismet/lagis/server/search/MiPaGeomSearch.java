@@ -46,7 +46,7 @@ public class MiPaGeomSearch extends GeomServerSearch implements RestApiCidsServe
 
     private static final Logger LOG = Logger.getLogger(MiPaGeomSearch.class);
     private static final String SQL_TEMPLATE =
-        "SELECT %s FROM %s, geom WHERE geom.id = mipa.fk_geom AND ST_intersects(GeomFromText('%s', %s), geom.geo_field)";
+        "SELECT %s FROM %s, geom WHERE geom.id = mipa.fk_geom AND ST_intersects(st_GeomFromText('%s', %s), geom.geo_field)";
 
     //~ Instance fields --------------------------------------------------------
 
