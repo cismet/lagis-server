@@ -75,21 +75,6 @@
             </dependency>
                                     
             <dependency>
-                <groupId>de.cismet.lagis</groupId>
-                <artifactId>lagis-commons</artifactId>
-                <version>7.0</version>
-                <!--
-                     lagis-server imports only final CONSTANTS from lagis-commons:
-                    -> static final fields will be inlined by the bytecode compiler 
-                    both in the current classes, and in other classes!
-                    -> maven dependecy-plugin does not find any import to lagis-commons
-                    during bytecode analysis!
-                -->
-                <scope>provided</scope>
-                <type>jar</type>
-            </dependency>
-            
-            <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
                 <version>7.7.7</version>
@@ -118,21 +103,16 @@
             <groupId>de.cismet.cids.custom.wupp.server</groupId>
             <artifactId>cids-custom-server-wuppertal</artifactId>
         </dependency>
-        <dependency>
-            <groupId>de.cismet.lagis</groupId>
-            <artifactId>lagis-commons</artifactId>
-            <!--
-                be careful when relying on scope set in <dependencyManagement>:
-                could be overwritten by upstream <dependencyManagement>!
-            -->
-            <scope>provided</scope>
-        </dependency>
         <!-- END: cids-dependencies -->
         
         <!-- BEGIN: managed dependencies -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
         <!-- END: managed dependencies -->
 
