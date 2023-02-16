@@ -131,11 +131,19 @@ public class CreateMeldungServerAction implements MetaServiceStore,
                         getConnectionContext())
                         .getBean();
 
-            final String cmd = getProperties().getCmd();
+            final MeldungenProperties properties = getProperties();
+
+            final String betreff = properties.getBetreffTemplate()
+                        .replaceAll("__FLURSTUECK__", flurstueckBeantoString(flurstueckBean))
+                        .replaceAll("__TITEL__", (name != null) ? name : "ohne Titel");
+            final String nachricht = properties.getNachrichtTemplate()
+                        .replaceAll("__ID__", Integer.toString(meldungBean.getPrimaryKeyValue()))
+                        .replaceAll("__TEXT__", (text != null) ? text.replaceAll("\"", "\\\"") : "");
+
+            final String cmd = properties.getCmd();
             final String[] cmdParts = cmd.split(" ");
             for (int i = 0; i < cmdParts.length; i++) {
-                cmdParts[i] = cmdParts[i].replaceAll("__BETREFF__", (name != null) ? name : "ohne Betreff")
-                            .replaceAll("__NACHRICHT__", (text != null) ? text.replaceAll("\"", "\\\"") : "");
+                cmdParts[i] = cmdParts[i].replaceAll("__BETREFF__", betreff).replaceAll("__NACHRICHT__", nachricht);
             }
 
             executeCmd(cmdParts);
@@ -144,6 +152,41 @@ public class CreateMeldungServerAction implements MetaServiceStore,
         } catch (final Exception ex) {
             LOG.error(ex, ex);
             return ex;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   flurstueckBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String flurstueckBeantoString(final CidsBean flurstueckBean) {
+        if (flurstueckBean == null) {
+            return null;
+        }
+        try {
+            final Integer id = (Integer)flurstueckBean.getProperty("fk_flurstueck_schluessel.id");
+            final Integer flur = (Integer)flurstueckBean.getProperty("fk_flurstueck_schluessel.flur");
+            final String gemarkung = (String)flurstueckBean.getProperty(
+                    "fk_flurstueck_schluessel.fk_gemarkung.bezeichnung");
+            final Integer zaehler = (Integer)flurstueckBean.getProperty("fk_flurstueck_schluessel.flurstueck_zaehler");
+            final Integer nenner = (Integer)flurstueckBean.getProperty("fk_flurstueck_schluessel.flurstueck_nenner");
+            final boolean isEchterSchluessel = !"pseudo".equals(((String)flurstueckBean.getProperty(
+                            "fk_flurstueck_schluessel.fk_flurstueck_art.bezeichnung")));
+            if (isEchterSchluessel) {
+                if (nenner != null) {
+                    return String.format("%s %d %d/%d", gemarkung, flur, zaehler, nenner);
+                } else {
+                    return String.format("%s %d %d", gemarkung, flur, zaehler);
+                }
+            } else {
+                return String.format("pseudo Schluessel%d", id);
+            }
+        } catch (Exception ex) {
+            LOG.error("Eine oder mehrere Felder der Entität sind null", ex);
+            return null;
         }
     }
 
