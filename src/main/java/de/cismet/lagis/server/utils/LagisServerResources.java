@@ -14,8 +14,11 @@ package de.cismet.lagis.server.utils;
 
 import lombok.Getter;
 
+import de.cismet.cids.utils.serverresources.PropertiesServerResource;
 import de.cismet.cids.utils.serverresources.ServerResource;
 import de.cismet.cids.utils.serverresources.TextServerResource;
+
+import de.cismet.lagis.properties.MeldungenProperties;
 
 /**
  * DOCUMENT ME!
@@ -27,7 +30,8 @@ public enum LagisServerResources {
 
     //~ Enum constants ---------------------------------------------------------
 
-    MOTD_PROPERTIES(new TextServerResource("/motd/lagis.properties"));
+    MOTD_PROPERTIES(new TextServerResource("/motd/lagis.properties")),
+    MELDUNGEN_PROPERTIES(new PropertiesServerResource("/meldungen/meldungen.properties", MeldungenProperties.class));
 
     //~ Instance fields --------------------------------------------------------
 
