@@ -10,7 +10,7 @@
 
     <groupId>de.cismet.lagis</groupId>
     <artifactId>lagis-server</artifactId>
-    <version>8.0</version>
+    <version>8.0.1</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -24,7 +24,7 @@
         <connection>https://github.com/cismet/lagis-server.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/lagis-server.git</developerConnection>
         <url>https://github.com/cismet/lagis-server</url>
-        <tag>v8.0</tag>
+        <tag>v8.0.1</tag>
     </scm>
   
     <issueManagement>
