@@ -108,7 +108,7 @@ public class LagisFortfuehrungItemSearch extends AbstractCidsServerSearch {
                     + ", to_date(lookup_alkis_ffn.beginn, 'DD-Mon-YY') AS beginn_date "
                     + ", flurstueckskennzeichen_alt AS fs_alt "
                     + ", flurstueckskennzeichen_neu AS fs_neu "
-                    + ", asText(geom.geo_field) AS geo_field "
+                    + ", st_asText(geom.geo_field) AS geo_field "
                     + ", flurstueck.id AS flurstueck_id "
                     + "FROM lookup_alkis_ffn "
                     + "LEFT JOIN lookup_ffn_anlassarten ON '\\\"' || lookup_ffn_anlassarten.anl_ffn || '\\\"' = lookup_alkis_ffn.anl_ffn "
